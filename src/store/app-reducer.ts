@@ -19,8 +19,8 @@ export const isResponseAC = (entries: Array<EntriesType>) =>
   ({type: 'app/SET-DATA', entries} as const)
 
 // thunks
-export const searchTC = (request: string, location: string) => (dispatch: Dispatch) => {
-  searchAPI.getRequest(request, location)
+export const searchTC = (request: string, location: string, userAgent: string) => (dispatch: Dispatch) => {
+  searchAPI.getRequest(request, location, userAgent)
     .then((res) => {
       dispatch(isResponseAC(res))
       console.log(res)

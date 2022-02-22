@@ -8,20 +8,29 @@ export const Checker = () => {
   const dispatch = useDispatch()
   const [data, setData] = useState<string>("")
   const [location, setLocation] = useState<string>("")
+  const [checkBox, setCheckBox] = useState<boolean>(false)
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist()
     setData(e.target.value);
   }
 
-
-  const switchCountry = (e: ChangeEvent<HTMLInputElement>) => {
+  const switchCountry = (e: ChangeEvent<HTMLSelectElement>) => {
     e.persist()
     setLocation(e.target.value);
   }
 
+  const handleCheckBox =() => {
+    setCheckBox(!checkBox);
+  }
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(searchTC(data, location))
+    let userAgent
+    if (checkBox) { userAgent = 'mobile'}
+    else {userAgent = 'desktop'}
+    console.log(checkBox)
+
+    dispatch(searchTC(data, location, userAgent))
   }
 
   return (
@@ -33,13 +42,23 @@ export const Checker = () => {
           <input type="text" value={data} onChange={handleChange}
                  placeholder="Find here..."/>
         </label>
-
-        <label>
-          <input type="text" value={location} onChange={switchCountry}
-                 placeholder="Choose the country"/>
-        </label>
-
         <button type="submit"></button>
+        <label>
+          Choose the country:
+          <select value={location} onChange={switchCountry}>
+            <option value="US" selected>USA</option>
+            <option value="BR">Brazil</option>
+            <option value="CA">Canada</option>
+            <option value="FR">France</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="AU">Australia</option>
+          </select>
+        </label>
+        <label>
+          Mobile
+          <input className={style.checkbox} type="checkbox" checked={checkBox} onChange={handleCheckBox} />
+        </label>
       </form>
       <DataMonitor/>
     </div>
