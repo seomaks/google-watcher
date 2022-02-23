@@ -26,13 +26,11 @@ export const isResponseAC = (entries: Array<EntriesType>) =>
   ({type: 'app/SET-DATA', entries} as const)
 
 // thunks
-export const searchTC = (request: string, location: string, userAgent: string) => (dispatch: Dispatch) => {
+export const searchTC = (request: string, location: string, userAgent: string) => async (dispatch: Dispatch) => {
   dispatch(isStatusAC('loading'))
-  searchAPI.getRequest(request, location, userAgent)
-    .then((res) => {
+  const res = await searchAPI.getRequest(request, location, userAgent)
       dispatch(isResponseAC(res))
       dispatch(isStatusAC('succeeded'))
-    })
 }
 
 // types

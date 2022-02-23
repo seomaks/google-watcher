@@ -24,7 +24,6 @@ export const Checker = () => {
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    debugger
     e.preventDefault();
     let userAgent
     if (checkBox) { userAgent = 'mobile'}
@@ -56,7 +55,7 @@ export const Checker = () => {
         </label>
         <label>
           Mobile
-          <input type="checkbox" checked={checkBox} onChange={handleCheckBox} />
+          <input className={style.optionInputCheckbox} type="checkbox" checked={checkBox} onChange={handleCheckBox} />
         </label>
         </div>
       </form>
