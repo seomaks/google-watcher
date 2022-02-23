@@ -5,7 +5,6 @@ const API_KEY = process.env.REACT_APP_RAPID_API_KEY
 const instance = axios.create({
   baseURL: 'https://google-search3.p.rapidapi.com/api/v1/search/q=',
   headers: {
-    //'x-user-agent': 'desktop',
     'x-rapidapi-host': 'google-search3.p.rapidapi.com',
     // @ts-ignore
     'x-rapidapi-key': API_KEY

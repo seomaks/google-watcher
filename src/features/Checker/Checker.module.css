@@ -1,7 +1,7 @@
 * {box-sizing: border-box;}
 form {
     position: relative;
-    width: 300px;
+    width: 600px;
     margin: 0 auto;
 }
 input {
@@ -46,4 +46,12 @@ select {
 label {
     font-size: 18px;
     font-weight: bold;
+}
+
+.setter {
+    display: flex;
+}
+
+.setter select {
+    width: 60%;
 }

@@ -7,7 +7,7 @@ import {DataMonitor} from "../Data-monitor/DataMonitor";
 export const Checker = () => {
   const dispatch = useDispatch()
   const [data, setData] = useState<string>("")
-  const [location, setLocation] = useState<string>("")
+  const [location, setLocation] = useState<string>("US")
   const [checkBox, setCheckBox] = useState<boolean>(false)
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist()
@@ -24,29 +24,28 @@ export const Checker = () => {
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    debugger
     e.preventDefault();
     let userAgent
     if (checkBox) { userAgent = 'mobile'}
     else {userAgent = 'desktop'}
-    console.log(checkBox)
-
     dispatch(searchTC(data, location, userAgent))
   }
 
   return (
     <div className={style.container}>
       <h1>Google it!</h1>
-
       <form name="form" onSubmit={handleSubmit}>
         <label>
           <input type="text" value={data} onChange={handleChange}
                  placeholder="Find here..."/>
         </label>
         <button type="submit"></button>
+        <div className={style.setter}>
         <label>
           Choose the country:
           <select value={location} onChange={switchCountry}>
-            <option value="US" selected>USA</option>
+            <option value="US">USA</option>
             <option value="BR">Brazil</option>
             <option value="CA">Canada</option>
             <option value="FR">France</option>
@@ -57,8 +56,9 @@ export const Checker = () => {
         </label>
         <label>
           Mobile
-          <input className={style.checkbox} type="checkbox" checked={checkBox} onChange={handleCheckBox} />
+          <input type="checkbox" checked={checkBox} onChange={handleCheckBox} />
         </label>
+        </div>
       </form>
       <DataMonitor/>
     </div>
