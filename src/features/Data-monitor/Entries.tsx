@@ -10,7 +10,7 @@ export const Entries = (props: PropsType) => {
     <div className={style.container}>
       <div className={style.title}>{props.title}</div>
       <a href={props.link}>{props.link}</a>
-      <div>{props.description}</div>
+      <div className={style.description}>{props.description}</div>
       <hr/>
     </div>
   )

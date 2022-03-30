@@ -1,14 +1,17 @@
 import {ChangeEvent, FormEvent, useState} from "react";
 import style from './Checker.module.css'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {searchTC} from "../../store/app-reducer";
 import {DataMonitor} from "../Data-monitor/DataMonitor";
+import {AppStateType} from "../../store/store";
 
 export const Checker = () => {
   const dispatch = useDispatch()
+  const pageSize = useSelector<AppStateType, number>(state => state.app.pageSize)
   const [data, setData] = useState<string>("")
   const [location, setLocation] = useState<string>("US")
   const [checkBox, setCheckBox] = useState<boolean>(false)
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist()
     setData(e.target.value);
@@ -28,7 +31,7 @@ export const Checker = () => {
     let userAgent
     if (checkBox) { userAgent = 'mobile'}
     else {userAgent = 'desktop'}
-    dispatch(searchTC(data, location, userAgent))
+    dispatch(searchTC(data, location, userAgent, pageSize))
   }
 
   return (
@@ -59,7 +62,7 @@ export const Checker = () => {
         </label>
         </div>
       </form>
-      <DataMonitor/>
+      <DataMonitor />
     </div>
   );
 }

@@ -4,15 +4,16 @@ import {EntriesType, searchAPI} from "../api/api";
 const initialState = {
   status: 'idle' as RequestStatusType,
   entries: [] as Array<EntriesType>,
-  country: ''
+  country: '',
+  pageSize: 20,
 }
 
 export const searchReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
     case 'app/SET-STATUS':
-      return { ...state, status: action.status }
+      return {...state, status: action.status}
     case 'app/SET-DATA':
-      return { ...state, entries: action.entries }
+      return {...state, entries: action.entries}
     default:
       return state
   }
@@ -26,11 +27,11 @@ export const isResponseAC = (entries: Array<EntriesType>) =>
   ({type: 'app/SET-DATA', entries} as const)
 
 // thunks
-export const searchTC = (request: string, location: string, userAgent: string) => async (dispatch: Dispatch) => {
+export const searchTC = (request: string, location: string, userAgent: string, pageSize: number) => async (dispatch: Dispatch) => {
   dispatch(isStatusAC('loading'))
-  const res = await searchAPI.getRequest(request, location, userAgent)
-      dispatch(isResponseAC(res))
-      dispatch(isStatusAC('succeeded'))
+  const res = await searchAPI.getRequest(request, location, userAgent, pageSize)
+  dispatch(isResponseAC(res.results))
+  dispatch(isStatusAC('succeeded'))
 }
 
 // types
@@ -38,4 +39,6 @@ export type InitialStateType = typeof initialState
 type isResponseActionType = ReturnType<typeof isResponseAC>
 type isStatusActionType = ReturnType<typeof isStatusAC>
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type ActionsType = isResponseActionType | isStatusActionType
+type ActionsType =
+  isResponseActionType
+  | isStatusActionType
