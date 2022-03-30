@@ -1,37 +1,39 @@
 import {ChangeEvent, FormEvent, useState} from "react";
 import style from './Checker.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {searchTC} from "../../store/app-reducer";
+import {
+  isCountryAC,
+  isRequestAC,
+  isUserAgentAC,
+  searchTC
+} from "../../store/app-reducer";
 import {DataMonitor} from "../Data-monitor/DataMonitor";
 import {AppStateType} from "../../store/store";
 
 export const Checker = () => {
   const dispatch = useDispatch()
   const pageSize = useSelector<AppStateType, number>(state => state.app.pageSize)
-  const [data, setData] = useState<string>("")
-  const [location, setLocation] = useState<string>("US")
+  let country = useSelector<AppStateType, string>(state => state.app.country)
+  let userAgent = useSelector<AppStateType, string>(state => state.app.userAgent)
+  let request = useSelector<AppStateType, string>(state => state.app.request)
   const [checkBox, setCheckBox] = useState<boolean>(false)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.persist()
-    setData(e.target.value);
+    dispatch(isRequestAC(e.currentTarget.value))
   }
 
   const switchCountry = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.persist()
-    setLocation(e.target.value);
+    dispatch(isCountryAC(e.currentTarget.value))
   }
 
-  const handleCheckBox =() => {
+  const handleCheckBox = () => {
     setCheckBox(!checkBox);
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    let userAgent
-    if (checkBox) { userAgent = 'mobile'}
-    else {userAgent = 'desktop'}
-    dispatch(searchTC(data, location, userAgent, pageSize))
+    userAgent = checkBox ? 'mobile' : 'desktop'
+    dispatch(isUserAgentAC(userAgent))
+    dispatch(searchTC(request, country, userAgent, pageSize))
   }
 
   return (
@@ -39,30 +41,31 @@ export const Checker = () => {
       <h1>Google it!</h1>
       <form name="form" onSubmit={handleSubmit}>
         <label>
-          <input type="text" value={data} onChange={handleChange}
+          <input type="text" value={request} onChange={handleChange}
                  placeholder="Find here..."/>
         </label>
         <button type="submit"></button>
         <div className={style.setter}>
-        <label>
-          Choose the country:
-          <select value={location} onChange={switchCountry}>
-            <option value="US">USA</option>
-            <option value="BR">Brazil</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="GB">United Kingdom</option>
-            <option value="DE">Germany</option>
-            <option value="AU">Australia</option>
-          </select>
-        </label>
-        <label>
-          Mobile
-          <input className={style.optionInputCheckbox} type="checkbox" checked={checkBox} onChange={handleCheckBox} />
-        </label>
+          <label>
+            Choose the country:
+            <select value={country} onChange={switchCountry}>
+              <option value="US">USA</option>
+              <option value="BR">Brazil</option>
+              <option value="CA">Canada</option>
+              <option value="FR">France</option>
+              <option value="GB">United Kingdom</option>
+              <option value="DE">Germany</option>
+              <option value="AU">Australia</option>
+            </select>
+          </label>
+          <label>
+            Mobile
+            <input className={style.optionInputCheckbox} type="checkbox"
+                   checked={checkBox} onChange={handleCheckBox}/>
+          </label>
         </div>
       </form>
-      <DataMonitor />
+      <DataMonitor/>
     </div>
   );
 }

@@ -4,7 +4,9 @@ import {EntriesType, searchAPI} from "../api/api";
 const initialState = {
   status: 'idle' as RequestStatusType,
   entries: [] as Array<EntriesType>,
-  country: '',
+  request: '',
+  country: 'US',
+  userAgent: 'desktop',
   pageSize: 20,
 }
 
@@ -14,6 +16,12 @@ export const searchReducer = (state: InitialStateType = initialState, action: Ac
       return {...state, status: action.status}
     case 'app/SET-DATA':
       return {...state, entries: action.entries}
+    case 'app/SET-COUNTRY':
+      return {...state, country: action.country}
+    case 'app/SET-USER-AGENT':
+      return {...state, userAgent: action.userAgent}
+    case 'app/SET-REQUEST':
+      return {...state, request: action.request}
     default:
       return state
   }
@@ -26,10 +34,19 @@ export const isStatusAC = (status: RequestStatusType) =>
 export const isResponseAC = (entries: Array<EntriesType>) =>
   ({type: 'app/SET-DATA', entries} as const)
 
+export const isCountryAC = (country: string) =>
+  ({type: 'app/SET-COUNTRY', country} as const)
+
+export const isUserAgentAC = (userAgent: string) =>
+  ({type: 'app/SET-USER-AGENT', userAgent} as const)
+
+export const isRequestAC = (request: string) =>
+  ({type: 'app/SET-REQUEST', request} as const)
+
 // thunks
-export const searchTC = (request: string, location: string, userAgent: string, pageSize: number) => async (dispatch: Dispatch) => {
+export const searchTC = (request: string, country: string, userAgent: string, pageSize: number) => async (dispatch: Dispatch) => {
   dispatch(isStatusAC('loading'))
-  const res = await searchAPI.getRequest(request, location, userAgent, pageSize)
+  const res = await searchAPI.getRequest(request, country, userAgent, pageSize)
   dispatch(isResponseAC(res.results))
   dispatch(isStatusAC('succeeded'))
 }
@@ -38,7 +55,13 @@ export const searchTC = (request: string, location: string, userAgent: string, p
 export type InitialStateType = typeof initialState
 type isResponseActionType = ReturnType<typeof isResponseAC>
 type isStatusActionType = ReturnType<typeof isStatusAC>
+type isCountryActionType = ReturnType<typeof isCountryAC>
+type isUserAgentActionType = ReturnType<typeof isUserAgentAC>
+type isRequestActionType = ReturnType<typeof isRequestAC>
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type ActionsType =
   isResponseActionType
   | isStatusActionType
+  | isCountryActionType
+  | isUserAgentActionType
+  | isRequestActionType

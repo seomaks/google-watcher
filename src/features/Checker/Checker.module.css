@@ -14,6 +14,15 @@ input {
     background: #ffffff;
     color: #9E9C9C;
 }
+
+input:focus::-webkit-input-placeholder { color:transparent; }
+
+input[type="text"]:focus {
+    color: #000000;
+    border: 3px solid #4285f4;
+    font-size: 16px;
+}
+
 button {
     position: absolute;
     right: 0px;

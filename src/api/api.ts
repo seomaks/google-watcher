@@ -26,7 +26,3 @@ export type EntriesType = {
   link: string
   title: string
 }
-
-// export type ResultType = {
-//   result: Array<EntriesType>
-// }
