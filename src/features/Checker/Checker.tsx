@@ -37,6 +37,7 @@ export const Checker = () => {
     userAgent = checkBox ? 'mobile' : 'desktop'
     dispatch(isUserAgentAC(userAgent))
     dispatch(searchTC(request, country, userAgent, pageSize))
+    dispatch(isRequestAC(''))
   }
 
   return (
