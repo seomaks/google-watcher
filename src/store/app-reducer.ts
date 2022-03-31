@@ -8,6 +8,7 @@ const initialState = {
   country: 'US',
   userAgent: 'desktop',
   pageSize: 20,
+  isMobile: false
 }
 
 export const searchReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
@@ -18,10 +19,10 @@ export const searchReducer = (state: InitialStateType = initialState, action: Ac
       return {...state, entries: action.entries}
     case 'app/SET-COUNTRY':
       return {...state, country: action.country}
-    case 'app/SET-USER-AGENT':
-      return {...state, userAgent: action.userAgent}
     case 'app/SET-REQUEST':
       return {...state, request: action.request}
+    case 'app/IS-MOBILE':
+      return {...state, isMobile: action.isMobile}
     default:
       return state
   }
@@ -37,15 +38,16 @@ export const isResponseAC = (entries: Array<EntriesType>) =>
 export const isCountryAC = (country: string) =>
   ({type: 'app/SET-COUNTRY', country} as const)
 
-export const isUserAgentAC = (userAgent: string) =>
-  ({type: 'app/SET-USER-AGENT', userAgent} as const)
-
 export const isRequestAC = (request: string) =>
   ({type: 'app/SET-REQUEST', request} as const)
 
+export const isMobileAC = (isMobile: boolean) =>
+  ({type: 'app/IS-MOBILE', isMobile} as const)
+
 // thunks
-export const searchTC = (request: string, country: string, userAgent: string, pageSize: number) => async (dispatch: Dispatch) => {
+export const searchTC = (request: string, country: string, userAgent: string, pageSize: number, isMobile: boolean) => async (dispatch: Dispatch) => {
   dispatch(isStatusAC('loading'))
+  userAgent = isMobile ? 'mobile' : 'desktop'
   const res = await searchAPI.getRequest(request, country, userAgent, pageSize)
     .then(result => {
       return result.data.results
@@ -62,12 +64,12 @@ export type InitialStateType = typeof initialState
 type isResponseActionType = ReturnType<typeof isResponseAC>
 type isStatusActionType = ReturnType<typeof isStatusAC>
 type isCountryActionType = ReturnType<typeof isCountryAC>
-type isUserAgentActionType = ReturnType<typeof isUserAgentAC>
 type isRequestActionType = ReturnType<typeof isRequestAC>
+type isMobileActionType = ReturnType<typeof isMobileAC>
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type ActionsType =
   isResponseActionType
   | isStatusActionType
   | isCountryActionType
-  | isUserAgentActionType
   | isRequestActionType
+  | isMobileActionType

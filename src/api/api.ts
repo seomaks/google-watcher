@@ -14,9 +14,6 @@ const instance = axios.create({
 export const searchAPI = {
   getRequest(request: string, location: string, userAgent: string, pageSize: number) {
     return instance.get(`${request}&num=${pageSize}`, {headers:{'x-proxy-location': location, 'x-user-agent': userAgent}})
-      // .then(response => {
-      //   return response.data
-      // })
   }
 }
 

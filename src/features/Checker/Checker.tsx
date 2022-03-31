@@ -1,10 +1,9 @@
-import {ChangeEvent, FormEvent, useState} from "react";
+import {ChangeEvent, FormEvent} from "react";
 import style from './Checker.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {
-  isCountryAC,
+  isCountryAC, isMobileAC,
   isRequestAC,
-  isUserAgentAC,
   searchTC
 } from "../../store/app-reducer";
 import {DataMonitor} from "../Data-monitor/DataMonitor";
@@ -12,11 +11,11 @@ import {AppStateType} from "../../store/store";
 
 export const Checker = () => {
   const dispatch = useDispatch()
-  const pageSize = useSelector<AppStateType, number>(state => state.app.pageSize)
+  let pageSize = useSelector<AppStateType, number>(state => state.app.pageSize)
   let country = useSelector<AppStateType, string>(state => state.app.country)
   let userAgent = useSelector<AppStateType, string>(state => state.app.userAgent)
   let request = useSelector<AppStateType, string>(state => state.app.request)
-  const [checkBox, setCheckBox] = useState<boolean>(false)
+  let isMobile = useSelector<AppStateType, boolean>(state => state.app.isMobile)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist()
@@ -29,14 +28,12 @@ export const Checker = () => {
   }
 
   const handleCheckBox = () => {
-    setCheckBox(!checkBox);
+    dispatch(isMobileAC(!isMobile))
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    userAgent = checkBox ? 'mobile' : 'desktop'
-    dispatch(isUserAgentAC(userAgent))
-    dispatch(searchTC(request, country, userAgent, pageSize))
+    dispatch(searchTC(request, country, userAgent, pageSize, isMobile))
     dispatch(isRequestAC(''))
   }
 
@@ -65,7 +62,7 @@ export const Checker = () => {
           <label>
             Mobile
             <input className={style.optionInputCheckbox} type="checkbox"
-                   checked={checkBox} onChange={handleCheckBox}/>
+                   checked={isMobile} onChange={handleCheckBox}/>
           </label>
         </div>
       </form>
