@@ -47,7 +47,13 @@ export const isRequestAC = (request: string) =>
 export const searchTC = (request: string, country: string, userAgent: string, pageSize: number) => async (dispatch: Dispatch) => {
   dispatch(isStatusAC('loading'))
   const res = await searchAPI.getRequest(request, country, userAgent, pageSize)
-  dispatch(isResponseAC(res.results))
+    .then(result => {
+      return result.data.results
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  dispatch(isResponseAC(res))
   dispatch(isStatusAC('succeeded'))
 }
 

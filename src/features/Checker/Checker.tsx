@@ -19,10 +19,12 @@ export const Checker = () => {
   const [checkBox, setCheckBox] = useState<boolean>(false)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.persist()
     dispatch(isRequestAC(e.currentTarget.value))
   }
 
   const switchCountry = (e: ChangeEvent<HTMLSelectElement>) => {
+    e.persist()
     dispatch(isCountryAC(e.currentTarget.value))
   }
 
@@ -31,6 +33,7 @@ export const Checker = () => {
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     userAgent = checkBox ? 'mobile' : 'desktop'
     dispatch(isUserAgentAC(userAgent))
     dispatch(searchTC(request, country, userAgent, pageSize))
