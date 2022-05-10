@@ -18,8 +18,8 @@ export const searchAPI = {
 }
 
 export type EntriesType = {
-  id: string
   description: string
   link: string
   title: string
 }
+

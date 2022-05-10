@@ -31,8 +31,7 @@ export const Checker = () => {
     dispatch(isMobileAC(!isMobile))
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     dispatch(searchTC(request, country, userAgent, pageSize, isMobile))
     dispatch(isRequestAC(''))
   }
