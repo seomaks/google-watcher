@@ -1,4 +1,5 @@
-import {ChangeEvent, FormEvent} from "react";
+import React from "react";
+import {ChangeEvent} from "react";
 import style from './Checker.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -10,6 +11,7 @@ import {DataMonitor} from "../Data-monitor/DataMonitor";
 import {AppStateType} from "../../store/store";
 
 export const Checker = () => {
+  console.log("Checker")
   const dispatch = useDispatch()
   let pageSize = useSelector<AppStateType, number>(state => state.app.pageSize)
   let country = useSelector<AppStateType, string>(state => state.app.country)
